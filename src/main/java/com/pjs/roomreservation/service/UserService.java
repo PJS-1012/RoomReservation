@@ -2,28 +2,47 @@ package com.pjs.roomreservation.service;
 
 import com.pjs.roomreservation.domain.User;
 import com.pjs.roomreservation.repository.UserRepository;
+import com.pjs.roomreservation.service.exception.DuplicateEmailException;
+import com.pjs.roomreservation.service.exception.UserNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder pwEncoder;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder pwEncoder){
         this.userRepository = userRepository;
+        this.pwEncoder = pwEncoder;
     }
 
+    @Transactional
     public Long register(String email, String password, String name) {
-        userRepository.findByEmail(email).ifPresent(u->{
-            throw new IllegalStateException("이미 존재하는 이메일입니다");
-        });
+        if(userRepository.existsByEmail(email)){
+            throw new DuplicateEmailException(email);
+        }
 
-        User user = new User(email, password, name);
+        String enPw = pwEncoder.encode(password);
+
+        User user = new User(email, enPw, name);
         userRepository.save(user);
 
         return user.getId();
     }
+
+    public User getById(Long userId){
+        return userRepository.findById(userId).orElseThrow(()->new UserNotFoundException(userId));
+    }
+
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException(email));
+    }
+
+
+
 }

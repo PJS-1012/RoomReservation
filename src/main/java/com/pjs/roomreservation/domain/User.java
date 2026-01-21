@@ -1,7 +1,6 @@
 package com.pjs.roomreservation.domain;
 
 import jakarta.persistence.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 
@@ -26,8 +25,8 @@ public class User {
     @Column(nullable = false)
     private boolean isAdmin;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     protected User(){}
 
@@ -35,6 +34,12 @@ public class User {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.isAdmin = false;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -51,6 +56,14 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isAdmin() {
