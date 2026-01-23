@@ -25,8 +25,12 @@ public class User {
     @Column(nullable = false)
     private boolean isAdmin;
 
+    @Column(nullable = false)
+    private boolean active;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
 
     protected User(){}
 
@@ -34,7 +38,13 @@ public class User {
         this.email = email;
         this.password = password;
         this.name = name;
+
         this.isAdmin = false;
+        this.active = true;
+    }
+
+    public void deactivate() {
+        this.active = false;
     }
 
     @PrePersist
@@ -42,6 +52,7 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
+    //get
     public Long getId() {
         return id;
     }
@@ -58,6 +69,15 @@ public class User {
         return password;
     }
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    //set
     public void setName(String name) {
         this.name = name;
     }
@@ -66,7 +86,4 @@ public class User {
         this.password = password;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
 }

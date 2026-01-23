@@ -3,6 +3,7 @@ package com.pjs.roomreservation.service;
 import com.pjs.roomreservation.domain.User;
 import com.pjs.roomreservation.repository.UserRepository;
 import com.pjs.roomreservation.service.exception.DuplicateEmailException;
+import com.pjs.roomreservation.service.exception.InvalidPasswordException;
 import com.pjs.roomreservation.service.exception.UserNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,24 @@ public class UserService {
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException(email));
+    }
+
+    @Transactional
+    public void changePw(String email, String currentPw, String newPw){
+        User user = getByEmail(email);
+
+        if(!pwEncoder.matches(currentPw, user.getPassword())){
+            throw new InvalidPasswordException();
+        }
+
+        String enPw = pwEncoder.encode(newPw);
+        user.setPassword(enPw);
+    }
+
+    @Transactional
+    public void deactivateUser(String email) {
+        User user = getByEmail(email);
+        user.deactivate();
     }
 
 
