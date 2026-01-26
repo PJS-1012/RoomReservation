@@ -30,7 +30,7 @@ public class GlobalException {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleEtc(Exception e){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError.of("Internal_Error", "서버 오류"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError.of("Internal_Error", "서버 오류"));
     }
 
     public record ApiError(String code, String message, Instant timeStamp){

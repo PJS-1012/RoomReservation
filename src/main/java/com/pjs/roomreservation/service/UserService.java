@@ -57,8 +57,11 @@ public class UserService {
     }
 
     @Transactional
-    public void deactivateUser(String email) {
+    public void deactivateUser(String email, String currentPw) {
         User user = getByEmail(email);
+        if(!pwEncoder.matches(currentPw, user.getPassword())){
+            throw new InvalidPasswordException();
+        }
         user.deactivate();
     }
 
