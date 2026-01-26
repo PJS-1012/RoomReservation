@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.print.attribute.standard.Media;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,8 +37,8 @@ public class UserControllerMockTest {
         ));
 
         mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -61,14 +60,14 @@ public class UserControllerMockTest {
         ));
 
         mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body1))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
         mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body2))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body2))
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -78,7 +77,7 @@ public class UserControllerMockTest {
     }
 
     @Test
-    void ChangePw_Wrong_Password() throws Exception {
+    void changePw_wrongPassword_401() throws Exception {
         String register = objectMapper.writeValueAsString(Map.of(
                 "email", "c@test.com",
                 "password", "1111",
@@ -92,14 +91,14 @@ public class UserControllerMockTest {
         ));
 
         mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(register))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(register))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
         mockMvc.perform(patch("/users/password")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(changePw))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(changePw))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -108,7 +107,7 @@ public class UserControllerMockTest {
     }
 
     @Test
-    void deactivate_401() throws Exception{
+    void deactivate_401() throws Exception {
 
         String register = objectMapper.writeValueAsString(Map.of(
                 "email", "d@test.com",
@@ -122,14 +121,14 @@ public class UserControllerMockTest {
         ));
 
         mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(register))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(register))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
         mockMvc.perform(delete("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(wrongPw))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(wrongPw))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -145,13 +144,47 @@ public class UserControllerMockTest {
         ));
 
         mockMvc.perform(delete("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").exists())
                 .andExpect(jsonPath("$.message").exists());
+    }
+
+    @Test
+    void register_400() throws Exception {
+        String register1 = objectMapper.writeValueAsString(Map.of(
+                "email", "atestcom",
+                "password", "1234",
+                "name", "park"
+        ));
+
+        String register2 = objectMapper.writeValueAsString(Map.of(
+                "email", "",
+                "password", "1234",
+                "name", "kim"
+        ));
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(register1))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value("Validation_Error"))
+                .andExpect(jsonPath("$.error.email").value("이메일 형식이 올바르지 않습니다."));
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(register2))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value("Validation_Error"))
+                .andExpect(jsonPath("$.error.email").value("이메일을 입력하세요."));
+
     }
 
 }
