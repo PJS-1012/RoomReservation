@@ -1,6 +1,7 @@
 package com.pjs.roomreservation.global.exception;
 
 import com.pjs.roomreservation.service.exception.DuplicateEmailException;
+import com.pjs.roomreservation.service.exception.InvalidCredentialException;
 import com.pjs.roomreservation.service.exception.InvalidPasswordException;
 import com.pjs.roomreservation.service.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,11 @@ public class GlobalException {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError.of("User_Not_Found", e.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidCredentialException.class)
+    public ResponseEntity<ApiError> handleInvalidCredential(InvalidCredentialException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiError.of("Invalid_Credential", e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
