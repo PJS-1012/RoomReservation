@@ -4,9 +4,11 @@ package com.pjs.roomreservation.controller;
 import com.pjs.roomreservation.dto.user.ChangePasswordDto;
 import com.pjs.roomreservation.dto.user.DeactivateDto;
 import com.pjs.roomreservation.dto.user.UserRegisterDto;
+import com.pjs.roomreservation.security.UserPrincipal;
 import com.pjs.roomreservation.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,14 +29,14 @@ public class UserController {
 
     @PatchMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePw(@Valid @RequestBody ChangePasswordDto req){
-        userService.changePw(req.getEmail(), req.getCurrentPw(), req.getNewPw());
+    public void changePw(@AuthenticationPrincipal UserPrincipal userprincipal, @Valid @RequestBody ChangePasswordDto req){
+        userService.changePw(userprincipal.getEmail(), req.getCurrentPw(), req.getNewPw());
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deactivate(@Valid @RequestBody DeactivateDto req){
-        userService.deactivateUser(req.getEmail(), req.getCurrentPw());
+    public void deactivate(@AuthenticationPrincipal UserPrincipal userPrincipal, @Valid @RequestBody DeactivateDto req){
+        userService.deactivateUser(userPrincipal.getEmail(), req.getCurrentPw());
     }
 
 

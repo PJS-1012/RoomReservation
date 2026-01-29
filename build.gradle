@@ -25,8 +25,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	// Security 코드 다 짜고 주석제거 ㄱㄱ
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-crypto'
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
