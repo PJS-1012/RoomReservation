@@ -39,11 +39,6 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiError.of("Invalid_Credential", e.getMessage()));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleEtc(Exception e){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError.of("Internal_Error", "서버 오류"));
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException e){
         Map<String, String> error = new LinkedHashMap<>();
@@ -53,6 +48,10 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.of("Validation_Error", "요청 값이 올바르지 않습니다.", error));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleEtc(Exception e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError.of("Internal_Error", "서버 오류"));
+    }
 
     public record ApiError(String code, String message, Instant timeStamp, Map<String, String> error){
         public static ApiError of(String code, String message, Map<String, String> error){

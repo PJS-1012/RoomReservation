@@ -75,6 +75,10 @@ public class User {
         return active;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     //set
     public void setName(String name) {
         this.name = name;

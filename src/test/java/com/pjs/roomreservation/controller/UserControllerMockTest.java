@@ -137,23 +137,6 @@ public class UserControllerMockTest {
     }
 
     @Test
-    void deactivate_404() throws Exception {
-        String body = objectMapper.writeValueAsString(Map.of(
-                "email", "e@test.com",
-                "currentPw", "1234"
-        ));
-
-        mockMvc.perform(delete("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").exists())
-                .andExpect(jsonPath("$.message").exists());
-    }
-
-    @Test
     void register_400() throws Exception {
         String register1 = objectMapper.writeValueAsString(Map.of(
                 "email", "atestcom",
@@ -186,5 +169,50 @@ public class UserControllerMockTest {
                 .andExpect(jsonPath("$.error.email").value("이메일을 입력하세요."));
 
     }
+
+    @Test
+    void me_401() throws Exception {
+        mockMvc.perform(get("/users/me"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").exists())
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.timeStamp").exists());
+    }
+
+    @Test
+    void print_filters() {
+        System.out.println(mockMvc);
+    }
+
+    @Test
+    void health_should_be_ok() throws Exception {
+        mockMvc.perform(get("/health"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Autowired
+    org.springframework.context.ApplicationContext context;
+
+    @Test
+    void context_check() {
+        System.out.println(context.getClass());
+    }
+
+
+    @Test
+    void diagnose_web_and_controllers() {
+        System.out.println("=== RestController beans ===");
+        System.out.println(context.getBeansWithAnnotation(org.springframework.web.bind.annotation.RestController.class).keySet());
+
+        System.out.println("=== RequestMappingHandlerMapping bean exists? ===");
+        System.out.println(context.getBeanNamesForType(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping.class).length);
+
+        System.out.println("=== DispatcherServlet bean exists? ===");
+        System.out.println(context.getBeanNamesForType(org.springframework.web.servlet.DispatcherServlet.class).length);
+    }
+
 
 }

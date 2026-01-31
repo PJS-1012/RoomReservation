@@ -1,8 +1,8 @@
 package com.pjs.roomreservation.security;
 
 public class UserPrincipal {
-    private Long userId;
-    private String email;
+    private final Long userId;
+    private final String email;
 
     public UserPrincipal(Long userId, String email) {
         this.userId = userId;
