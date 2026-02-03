@@ -22,13 +22,14 @@ public class JwtTokenProvider {
         this.expirationSec = expirationSec;
     }
 
-    public String createAccessToken(Long userId, String email) {
+    public String createAccessToken(Long userId, String email, String role) {
         Instant now = Instant.now();
         Instant exp = now.plusSeconds(expirationSec);
 
         return Jwts.builder()
                 .subject(String.valueOf(userId))
                 .claim("email", email)
+                .claim("role", role)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(exp))
                 .signWith(key)

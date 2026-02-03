@@ -28,6 +28,8 @@ public class AuthService {
             throw new InvalidCredentialException();
         }
 
-        return jwtTokenProvider.createAccessToken(user.getId(), user.getEmail());
+        String role = user.isAdmin() ? "ADMIN" : "USER";
+
+        return jwtTokenProvider.createAccessToken(user.getId(), user.getEmail(), role);
     }
 }

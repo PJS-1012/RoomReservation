@@ -1,6 +1,7 @@
 package com.pjs.roomreservation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pjs.roomreservation.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,6 +28,9 @@ public class UserControllerMockTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     void register_201() throws Exception {
@@ -212,6 +216,83 @@ public class UserControllerMockTest {
 
         System.out.println("=== DispatcherServlet bean exists? ===");
         System.out.println(context.getBeanNamesForType(org.springframework.web.servlet.DispatcherServlet.class).length);
+    }
+
+    @Test
+    void admin_ping403() throws Exception {
+        String register = objectMapper.writeValueAsString(Map.of(
+                "email", "q@test.com",
+                "password", "1234",
+                "name", "park"
+        ));
+
+        String login = objectMapper.writeValueAsString(Map.of(
+                "email", "q@test.com",
+                "password", "1234"
+        ));
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(register))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        String token = mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(login))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String accessToken = objectMapper.readTree(token).get("accessToken").asText();
+
+        mockMvc.perform(get("/admin/ping")
+                .header("Authorization", "Bearer " + accessToken))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value("FORBIDDEN"));
+    }
+
+    @Test
+    void admin_ping200() throws Exception {
+        String register = objectMapper.writeValueAsString(Map.of(
+                "email", "w@test.com",
+                "password", "1234",
+                "name", "park"
+        ));
+
+        String login = objectMapper.writeValueAsString(Map.of(
+                "email", "w@test.com",
+                "password", "1234"
+        ));
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(register))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        userRepository.promoteAdminByEmail("w@test.com");
+
+        String token = mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(login))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String accessToken = objectMapper.readTree(token).get("accessToken").asText();
+
+        mockMvc.perform(get("/admin/ping")
+                        .header("Authorization", "Bearer " + accessToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("OK"));
     }
 
 

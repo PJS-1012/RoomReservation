@@ -1,6 +1,7 @@
 package com.pjs.roomreservation.config;
 
 
+import com.pjs.roomreservation.security.JwtAccessDeniedHandler;
 import com.pjs.roomreservation.security.JwtAuthEntryPoint;
 import com.pjs.roomreservation.security.JwtAuthFilter;
 import com.pjs.roomreservation.security.JwtTokenProvider;
@@ -22,16 +23,19 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider, JwtAuthEntryPoint entryPoint) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider, JwtAuthEntryPoint entryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(h -> h.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling((eh -> eh.authenticationEntryPoint(entryPoint)))
+                .exceptionHandling((eh -> eh
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler)))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/health").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
