@@ -22,7 +22,7 @@ public class AuthService {
     }
 
     public String login(String email, String password) {
-        User user = userRepository.findByEmail(email).orElseThrow(InvalidCredentialException::new);
+        User user = userRepository.findByEmailAndActiveTrue(email).orElseThrow(InvalidCredentialException::new);
 
         if(!pwEncoder.matches(password, user.getPassword())){
             throw new InvalidCredentialException();

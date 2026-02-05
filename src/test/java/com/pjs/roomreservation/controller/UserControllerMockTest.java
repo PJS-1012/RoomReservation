@@ -288,11 +288,66 @@ public class UserControllerMockTest {
 
         String accessToken = objectMapper.readTree(token).get("accessToken").asText();
 
+
         mockMvc.perform(get("/admin/ping")
                         .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("OK"));
+    }
+
+    @Test
+    void deactivate_login_401() throws Exception {
+
+        String register = objectMapper.writeValueAsString(Map.of(
+                "email", "x@test.com",
+                "password", "1234",
+                "name", "park"
+        ));
+
+        String login = objectMapper.writeValueAsString(Map.of(
+                "email", "x@test.com",
+                "password", "1234"
+        ));
+
+        String delete = objectMapper.writeValueAsString(Map.of(
+                "email", "x@test.com",
+                "currentPw", "1234"
+        ));
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(register))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        String token = mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(login))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String accessToken = objectMapper.readTree(token).get("accessToken").asText();
+
+        mockMvc.perform(delete("/users")
+                        .header("Authorization", "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(delete))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(login))
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").exists())
+                .andExpect(jsonPath("$.message").exists());
+
     }
 
 

@@ -37,11 +37,11 @@ public class UserService {
     }
 
     public User getById(Long userId){
-        return userRepository.findById(userId).orElseThrow(()->new UserNotFoundException(userId));
+        return userRepository.findByIdAndActiveTrue(userId).orElseThrow(()->new UserNotFoundException(userId));
     }
 
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException(email));
+        return userRepository.findByEmailAndActiveTrue(email).orElseThrow(()->new UserNotFoundException(email));
     }
 
     @Transactional
