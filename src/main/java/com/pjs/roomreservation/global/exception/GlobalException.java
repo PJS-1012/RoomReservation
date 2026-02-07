@@ -1,9 +1,6 @@
 package com.pjs.roomreservation.global.exception;
 
-import com.pjs.roomreservation.service.exception.DuplicateEmailException;
-import com.pjs.roomreservation.service.exception.InvalidCredentialException;
-import com.pjs.roomreservation.service.exception.InvalidPasswordException;
-import com.pjs.roomreservation.service.exception.UserNotFoundException;
+import com.pjs.roomreservation.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -37,6 +34,16 @@ public class GlobalException {
     @ExceptionHandler(InvalidCredentialException.class)
     public ResponseEntity<ApiError> handleInvalidCredential(InvalidCredentialException e){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiError.of("Invalid_Credential", e.getMessage()));
+    }
+
+    @ExceptionHandler(RoomNotFoundException.class)
+    public ResponseEntity<ApiError> handleRoomNotFound(RoomNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError.of("Room_Not_Found", e.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicateRoomNameException.class)
+    public ResponseEntity<ApiError> handleDuplicateRoomName(DuplicateRoomNameException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiError.of("Duplicate_Room_Name", e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
