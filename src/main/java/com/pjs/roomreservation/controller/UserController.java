@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/me")
     public UserMeResponseDto me(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        var user = userService.getById(userPrincipal.getUserId());
+        var user = userService.getActiveById(userPrincipal.getUserId());
         return new UserMeResponseDto(
                 user.getId(),
                 user.getPassword(),

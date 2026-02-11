@@ -36,17 +36,17 @@ public class UserService {
         return user.getId();
     }
 
-    public User getById(Long userId){
+    public User getActiveById(Long userId){
         return userRepository.findByIdAndActiveTrue(userId).orElseThrow(()->new UserNotFoundException(userId));
     }
 
-    public User getByEmail(String email) {
+    public User getActiveByEmail(String email) {
         return userRepository.findByEmailAndActiveTrue(email).orElseThrow(()->new UserNotFoundException(email));
     }
 
     @Transactional
     public void changePw(String email, String currentPw, String newPw){
-        User user = getByEmail(email);
+        User user = getActiveByEmail(email);
 
         if(!pwEncoder.matches(currentPw, user.getPassword())){
             throw new InvalidPasswordException();
@@ -58,7 +58,7 @@ public class UserService {
 
     @Transactional
     public void deactivateUser(String email, String currentPw) {
-        User user = getByEmail(email);
+        User user = getActiveByEmail(email);
         if(!pwEncoder.matches(currentPw, user.getPassword())){
             throw new InvalidPasswordException();
         }

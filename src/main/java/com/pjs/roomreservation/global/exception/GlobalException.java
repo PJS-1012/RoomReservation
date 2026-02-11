@@ -46,6 +46,26 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiError.of("Duplicate_Room_Name", e.getMessage()));
     }
 
+    @ExceptionHandler(ReservationConflictException.class)
+    public ResponseEntity<ApiError> handleReservationConflict(ReservationConflictException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiError.of("Reservation_Conflict", e.getMessage()));
+    }
+
+    @ExceptionHandler(ReservationNotFoundException.class)
+    public ResponseEntity<ApiError> handleReservationNotFound(ReservationNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError.of("Reservation_Not_Found", e.getMessage()));
+    }
+
+    @ExceptionHandler(ReservationForbiddenException.class)
+    public ResponseEntity<ApiError> handleReservationForbidden(ReservationForbiddenException e){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiError.of("Reservation_Forbidden", e.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.of("Bad_Request", e.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException e){
         Map<String, String> error = new LinkedHashMap<>();

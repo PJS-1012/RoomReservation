@@ -1,14 +1,18 @@
 package com.pjs.roomreservation.repository;
 
 import com.pjs.roomreservation.domain.Reservation;
+import com.pjs.roomreservation.domain.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
-public interface ReservationRepository extends JpaRepository {
+public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+
+    //Optional<Reservation> findById(Long Id);
     @Query("select count(r) > 0 from Reservation r where r.room.id = :roomId and r.canceled = false and r.startAt < :endAt and r.endAt >: startAt")
     boolean existsOverlapping (@Param("roomId") Long roomId, @Param("startAt") LocalDateTime startAt, @Param("endAt") LocalDateTime endAt);
 
