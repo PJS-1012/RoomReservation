@@ -28,7 +28,7 @@ public class AdminRoomController {
         roomService.update(roomId, req.getName(), req.getLocation(), req.getCapacity());
     }
 
-    @DeleteMapping("{roomId")
+    @DeleteMapping("{roomId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deactivate(@PathVariable Long roomId){
         roomService.deactivate(roomId);
