@@ -4,9 +4,11 @@ import com.pjs.roomreservation.domain.Reservation;
 import com.pjs.roomreservation.domain.Room;
 import com.pjs.roomreservation.domain.User;
 import com.pjs.roomreservation.repository.ReservationRepository;
+import com.pjs.roomreservation.repository.RoomRepository;
 import com.pjs.roomreservation.service.exception.ReservationConflictException;
 import com.pjs.roomreservation.service.exception.ReservationForbiddenException;
 import com.pjs.roomreservation.service.exception.ReservationNotFoundException;
+import com.pjs.roomreservation.service.exception.RoomNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,19 +19,19 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ReservationService {
     private final ReservationRepository reservationRepository;
-    private final RoomService roomService;
+    private final RoomRepository roomRepository;
     private final UserService userService;
 
-    public ReservationService(ReservationRepository reservationRepository, RoomService roomService, UserService userService) {
+    public ReservationService(ReservationRepository reservationRepository, RoomRepository roomRepository, UserService userService) {
         this.reservationRepository = reservationRepository;
-        this.roomService = roomService;
+        this.roomRepository = roomRepository;
         this.userService = userService;
     }
 
     @Transactional
     public Long create(Long userId, Long roomId, LocalDateTime startAt, LocalDateTime endAt){
         var user = userService.getActiveById(userId);
-        var room = roomService.getActiveById(roomId);
+        var room = roomRepository.findByIdForUpdate(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));
 
         if(!startAt.isBefore(endAt)){
             throw new IllegalArgumentException("시작 시간은 종료 시간보다 이전이어야 합니다.");
