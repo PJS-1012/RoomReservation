@@ -1,8 +1,14 @@
 package com.pjs.roomreservation.dto.reservation;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 
+@Schema(description = "회의실 예약 정보 DTO")
+
 public class ReservationResponseDto {
+
+    @Schema(description = "")
     private final Long id;
     private final Long roomId;
     private final String roomName;
