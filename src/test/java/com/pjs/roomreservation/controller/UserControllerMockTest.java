@@ -186,6 +186,50 @@ public class UserControllerMockTest {
     }
 
     @Test
+    void me_200_doesNotExposePassword() throws Exception {
+        String register = objectMapper.writeValueAsString(Map.of(
+                "email", "me@test.com",
+                "password", "1234",
+                "name", "park"
+        ));
+
+        String login = objectMapper.writeValueAsString(Map.of(
+                "email", "me@test.com",
+                "password", "1234"
+        ));
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(register))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        String token = mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(login))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String accessToken = objectMapper.readTree(token).get("accessToken").asText();
+
+        mockMvc.perform(get("/users/me")
+                        .header("Authorization", "Bearer " + accessToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.email").value("me@test.com"))
+                .andExpect(jsonPath("$.name").value("park"))
+                .andExpect(jsonPath("$.active").value(true))
+                .andExpect(jsonPath("$.admin").value(false))
+                .andExpect(jsonPath("$.createdAt").exists())
+                .andExpect(jsonPath("$.password").doesNotExist());
+    }
+
+    @Test
     void print_filters() {
         System.out.println(mockMvc);
     }

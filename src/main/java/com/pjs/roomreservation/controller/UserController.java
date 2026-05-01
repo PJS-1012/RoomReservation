@@ -52,7 +52,6 @@ public class UserController {
         var user = userService.getActiveById(userPrincipal.getUserId());
         return new UserMeResponseDto(
                 user.getId(),
-                user.getPassword(),
                 user.getEmail(),
                 user.getName(),
                 user.isActive(),
