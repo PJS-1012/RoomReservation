@@ -20,7 +20,7 @@ public class RoomService {
 
     @Transactional
     public Long create(String name, String location, int capacity) {
-        if(roomRepository.existsByName(name)){
+        if(roomRepository.existsByNameAndActiveTrue(name)){
             throw new DuplicateRoomNameException(name);
         }
 
@@ -43,7 +43,7 @@ public class RoomService {
     public void update(Long id, String name, String location, int capacity){
         Room room = getActiveById(id);
 
-        if(!room.getName().equals(name) && roomRepository.existsByName(name)){
+        if(!room.getName().equals(name) && roomRepository.existsByNameAndActiveTrue(name)){
             throw new DuplicateRoomNameException(name);
         }
 

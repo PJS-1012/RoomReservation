@@ -2,11 +2,10 @@ package com.pjs.roomreservation.domain;
 
 import jakarta.persistence.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "rooms", uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
+@Table(name = "rooms")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
