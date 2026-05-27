@@ -74,8 +74,8 @@ public class ReservationControllerMockTest {
 
         Long roomId = createRoom("회의실A", "3층", 8);
 
-        LocalDateTime startAt = LocalDateTime.of(2026, 2, 20, 10, 0);
-        LocalDateTime endAt   = LocalDateTime.of(2026, 2, 20, 11, 0);
+        LocalDateTime startAt = LocalDateTime.of(2030, 2, 20, 10, 0);
+        LocalDateTime endAt   = LocalDateTime.of(2030, 2, 20, 11, 0);
 
         String body = objectMapper.writeValueAsString(Map.of(
                 "roomId", roomId,
@@ -100,11 +100,11 @@ public class ReservationControllerMockTest {
 
         Long roomId = createRoom("회의실B", "2층", 6);
 
-        LocalDateTime s1 = LocalDateTime.of(2026, 2, 20, 10, 0);
-        LocalDateTime e1 = LocalDateTime.of(2026, 2, 20, 11, 0);
+        LocalDateTime s1 = LocalDateTime.of(2030, 2, 20, 10, 0);
+        LocalDateTime e1 = LocalDateTime.of(2030, 2, 20, 11, 0);
 
-        LocalDateTime s2 = LocalDateTime.of(2026, 2, 20, 10, 30);
-        LocalDateTime e2 = LocalDateTime.of(2026, 2, 20, 11, 30);
+        LocalDateTime s2 = LocalDateTime.of(2030, 2, 20, 10, 30);
+        LocalDateTime e2 = LocalDateTime.of(2030, 2, 20, 11, 30);
 
         String body1 = objectMapper.writeValueAsString(Map.of(
                 "roomId", roomId,
@@ -140,8 +140,8 @@ public class ReservationControllerMockTest {
 
         Long roomId = createRoom("회의실C", "1층", 4);
 
-        LocalDateTime startAt = LocalDateTime.of(2026, 2, 20, 12, 0);
-        LocalDateTime endAt   = LocalDateTime.of(2026, 2, 20, 13, 0);
+        LocalDateTime startAt = LocalDateTime.of(2030, 2, 20, 12, 0);
+        LocalDateTime endAt   = LocalDateTime.of(2030, 2, 20, 13, 0);
 
         String body = objectMapper.writeValueAsString(Map.of(
                 "roomId", roomId,
@@ -175,8 +175,8 @@ public class ReservationControllerMockTest {
 
         Long roomId = createRoom("회의실D", "4층", 10);
 
-        LocalDateTime startAt = LocalDateTime.of(2026, 2, 21, 10, 0);
-        LocalDateTime endAt   = LocalDateTime.of(2026, 2, 21, 11, 0);
+        LocalDateTime startAt = LocalDateTime.of(2030, 2, 21, 10, 0);
+        LocalDateTime endAt   = LocalDateTime.of(2030, 2, 21, 11, 0);
 
         String body = objectMapper.writeValueAsString(Map.of(
                 "roomId", roomId,
