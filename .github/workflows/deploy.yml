@@ -1,0 +1,48 @@
+name: Spring Boot CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x gradlew
+
+      - name: Build Spring Boot JAR
+        run: ./gradlew clean build -x test
+
+      - name: Copy JAR to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "build/libs/RoomReservation-0.0.1-SNAPSHOT.jar"
+          target: "/home/ubuntu/deploy"
+
+      - name: Restart Spring Boot service
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo mkdir -p /opt/roomreservation
+            sudo cp /home/ubuntu/deploy/build/libs/RoomReservation-0.0.1-SNAPSHOT.jar /opt/roomreservation/app.jar
+            sudo chown ubuntu:ubuntu /opt/roomreservation/app.jar
+            sudo systemctl restart roomreservation
+            sudo systemctl status roomreservation --no-pager
