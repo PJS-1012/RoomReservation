@@ -158,7 +158,9 @@ public class ReservationControllerMockTest {
         mockMvc.perform(get("/reservations")
                         .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].roomId").value(roomId));
     }
 
     @Test

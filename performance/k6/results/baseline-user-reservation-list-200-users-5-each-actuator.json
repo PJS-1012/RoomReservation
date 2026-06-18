@@ -1,0 +1,260 @@
+﻿[
+    {
+        "timestamp":  "2026-06-18T17:50:19.7341410+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:50:29.8368611+09:00",
+        "hikaricp.connections.active":  1.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:50:39.8532354+09:00",
+        "hikaricp.connections.active":  1.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:50:49.8774441+09:00",
+        "hikaricp.connections.active":  1.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:50:59.8842225+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:51:09.8999770+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:51:19.9183486+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:51:29.9274117+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:51:39.9374009+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:51:49.9453428+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:51:59.9559135+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:52:09.9720716+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:52:19.9900091+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:52:29.9948658+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:52:39.9998003+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:52:50.0065471+09:00",
+        "hikaricp.connections.active":  1.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:53:00.0257988+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:53:10.0394374+09:00",
+        "hikaricp.connections.active":  1.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:53:20.0600435+09:00",
+        "hikaricp.connections.active":  1.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:53:30.0655248+09:00",
+        "hikaricp.connections.active":  1.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:53:40.0794438+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:53:50.0985493+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:54:00.1141288+09:00",
+        "hikaricp.connections.active":  1.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:54:10.1266693+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:54:20.1460387+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:54:30.1665608+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:54:40.1817691+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:54:50.1883705+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:55:00.2147576+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:55:10.2331751+09:00",
+        "hikaricp.connections.active":  3.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:55:20.2526486+09:00",
+        "hikaricp.connections.active":  2.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:55:30.2701373+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:55:40.2767790+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:55:50.2876915+09:00",
+        "hikaricp.connections.active":  2.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:56:00.3008646+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:56:10.3194259+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:56:20.3326926+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:56:30.3370635+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:56:40.3459360+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:56:50.3624535+09:00",
+        "hikaricp.connections.active":  3.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:57:00.3727681+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:57:10.3793522+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    },
+    {
+        "timestamp":  "2026-06-18T17:57:20.3884773+09:00",
+        "hikaricp.connections.active":  0.0,
+        "hikaricp.connections.pending":  0.0,
+        "hikaricp.connections.max":  10.0
+    }
+]

@@ -1,8 +1,6 @@
 package com.pjs.roomreservation.service;
 
 import com.pjs.roomreservation.domain.Reservation;
-import com.pjs.roomreservation.domain.Room;
-import com.pjs.roomreservation.domain.User;
 import com.pjs.roomreservation.repository.ReservationRepository;
 import com.pjs.roomreservation.repository.RoomRepository;
 import com.pjs.roomreservation.service.exception.ReservationConflictException;
@@ -21,7 +19,6 @@ import java.util.List;
 public class ReservationService {
     private static final Duration MIN_RESERVATION_DURATION = Duration.ofMinutes(30);
     private static final Duration MAX_RESERVATION_DURATION = Duration.ofHours(4);
-
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
     private final UserService userService;
@@ -69,6 +66,12 @@ public class ReservationService {
         userService.getActiveById(userId);
 
         return reservationRepository.findAllByUserIdOrderByStartAtDesc(userId);
+    }
+
+    public List<Reservation> showRoomReservationsForAdmin(Long roomId) {
+        roomRepository.findByIdAndActiveTrue(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));
+
+        return reservationRepository.findAllByRoomIdOrderByCreatedAtDescIdDesc(roomId);
     }
 
     @Transactional

@@ -9,7 +9,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -27,29 +34,30 @@ public class ReservationController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "원하는 시간대 직접 입력해 회의실 예약")
-    public Long create(@AuthenticationPrincipal UserPrincipal principal, @Valid @RequestBody ReservationCreateDto req){
+    public Long create(@AuthenticationPrincipal UserPrincipal principal, @Valid @RequestBody ReservationCreateDto req) {
         return reservationService.create(principal.getUserId(), req.getRoomId(), req.getStartAt(), req.getEndAt());
     }
 
     @GetMapping
     @Operation(summary = "본인이 예약한 회의실 정보 확인")
-    public List<ReservationResponseDto> myReservation(@AuthenticationPrincipal UserPrincipal principal){
+    public List<ReservationResponseDto> myReservation(@AuthenticationPrincipal UserPrincipal principal) {
         return reservationService.showList(principal.getUserId()).stream()
-                .map(r -> new ReservationResponseDto(
-                        r.getId(),
-                        r.getRoom().getId(),
-                        r.getRoom().getName(),
-                        r.getStartAt(),
-                        r.getEndAt(),
-                        r.isCanceled(),
-                        r.getCreatedAt()))
+                .map(reservation -> new ReservationResponseDto(
+                        reservation.getId(),
+                        reservation.getRoom().getId(),
+                        reservation.getRoom().getName(),
+                        reservation.getStartAt(),
+                        reservation.getEndAt(),
+                        reservation.isCanceled(),
+                        reservation.getCreatedAt()
+                ))
                 .toList();
     }
 
     @DeleteMapping("/{reservationId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "본인이 예약한 회의실 취소")
-    public void cancel(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long reservationId){
+    public void cancel(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long reservationId) {
         reservationService.cancel(principal.getUserId(), reservationId);
     }
 }
