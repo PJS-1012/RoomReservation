@@ -1,5 +1,6 @@
 package com.pjs.roomreservation.controller;
 
+import com.pjs.roomreservation.dto.PageResponseDto;
 import com.pjs.roomreservation.dto.reservation.ReservationCreateDto;
 import com.pjs.roomreservation.dto.reservation.ReservationResponseDto;
 import com.pjs.roomreservation.security.UserPrincipal;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
@@ -40,18 +40,12 @@ public class ReservationController {
 
     @GetMapping
     @Operation(summary = "본인이 예약한 회의실 정보 확인")
-    public List<ReservationResponseDto> myReservation(@AuthenticationPrincipal UserPrincipal principal) {
-        return reservationService.showList(principal.getUserId()).stream()
-                .map(reservation -> new ReservationResponseDto(
-                        reservation.getId(),
-                        reservation.getRoom().getId(),
-                        reservation.getRoom().getName(),
-                        reservation.getStartAt(),
-                        reservation.getEndAt(),
-                        reservation.isCanceled(),
-                        reservation.getCreatedAt()
-                ))
-                .toList();
+    public PageResponseDto<ReservationResponseDto> myReservation(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size
+    ) {
+        return reservationService.showList(principal.getUserId(), page, size);
     }
 
     @DeleteMapping("/{reservationId}")

@@ -74,6 +74,7 @@ export function setup() {
     adminToken,
     roomId,
     seedReservations,
+    pageSize: Number(__ENV.PAGE_SIZE || 50),
   };
 }
 
@@ -82,19 +83,26 @@ export default function (data) {
   params.tags = { load_stage: currentLoadStage() };
 
   const res = http.get(
-    `${BASE_URL}/admin/rooms/${data.roomId}/reservations`,
+    `${BASE_URL}/admin/rooms/${data.roomId}/reservations?page=0&size=${data.pageSize}`,
     params
   );
 
   check(res, {
     'admin room reservations returns 200': (r) => r.status === 200,
-    'admin room reservations returns every seeded reservation': (r) => {
+    'admin room reservations returns one page': (r) => {
       if (r.status !== 200) {
         return false;
       }
 
       const body = r.json();
-      return Array.isArray(body) && body.length === data.seedReservations;
+      return Array.isArray(body.content) && body.content.length === data.pageSize;
+    },
+    'admin room reservations reports total elements': (r) => {
+      if (r.status !== 200) {
+        return false;
+      }
+
+      return r.json().totalElements === data.seedReservations;
     },
     'admin room reservations returns target room only': (r) => {
       if (r.status !== 200) {
@@ -102,7 +110,7 @@ export default function (data) {
       }
 
       const body = r.json();
-      return body.every((reservation) => reservation.roomId === data.roomId);
+      return body.content.every((reservation) => reservation.roomId === data.roomId);
     },
   });
 

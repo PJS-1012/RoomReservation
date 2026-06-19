@@ -1,0 +1,248 @@
+{
+    "metrics": {
+        "checks": {
+            "passes": 682179,
+            "fails": 0,
+            "value": 1
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 171546,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "http_req_duration{load_stage:stage_300}": {
+            "med": 5.3677,
+            "max": 22.5813,
+            "p(90)": 6.98083,
+            "p(95)": 7.3599,
+            "avg": 5.379435307981151,
+            "min": 1.5075,
+            "thresholds": {
+                "p(95)<5000": false
+            }
+        },
+        "data_received": {
+            "rate": 7020720.1190935355,
+            "count": 2991069298
+        },
+        "iteration_duration": {
+            "avg": 1007.761608496331,
+            "min": 1001.7653,
+            "med": 1006.8523,
+            "max": 1156.087,
+            "p(90)": 1010.7406699999999,
+            "p(95)": 1014.511595
+        },
+        "http_req_duration{expected_response:true}": {
+            "min": 1.4124,
+            "med": 5.8514,
+            "max": 151.333,
+            "p(90)": 8.16525,
+            "p(95)": 10.758750000000001,
+            "avg": 6.543814322688772
+        },
+        "http_req_blocked": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.012072820118219016,
+            "min": 0,
+            "med": 0,
+            "max": 23.0607
+        },
+        "vus": {
+            "value": 4,
+            "min": 0,
+            "max": 1000
+        },
+        "http_req_sending": {
+            "avg": 0.018016432327189254,
+            "min": 0,
+            "med": 0,
+            "max": 54.631,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "vus_max": {
+            "min": 1000,
+            "max": 1000,
+            "value": 1000
+        },
+        "http_req_waiting": {
+            "p(95)": 9.183375,
+            "avg": 6.07884018513964,
+            "min": 1.4124,
+            "med": 5.6284,
+            "max": 144.9277,
+            "p(90)": 7.59235
+        },
+        "iterations": {
+            "count": 170144,
+            "rate": 399.3666762390908
+        },
+        "data_sent": {
+            "count": 63204695,
+            "rate": 148355.79841108402
+        },
+        "http_req_duration": {
+            "min": 1.4124,
+            "med": 5.8514,
+            "max": 151.333,
+            "p(90)": 8.16525,
+            "p(95)": 10.758750000000001,
+            "avg": 6.543814322688772,
+            "thresholds": {
+                "p(95)<5000": false
+            }
+        },
+        "http_req_duration{load_stage:stage_100}": {
+            "med": 4.3546,
+            "max": 20.0191,
+            "p(90)": 5.8364,
+            "p(95)": 6.2022,
+            "avg": 4.49863037328096,
+            "min": 1.5184,
+            "thresholds": {
+                "p(95)<5000": false
+            }
+        },
+        "http_req_duration{load_stage:stage_500}": {
+            "max": 104.8318,
+            "p(90)": 7.2824800000000005,
+            "p(95)": 7.7911,
+            "avg": 5.87410303105817,
+            "min": 1.4124,
+            "med": 5.8219,
+            "thresholds": {
+                "p(95)<5000": false
+            }
+        },
+        "http_reqs": {
+            "count": 171546,
+            "rate": 402.6574891980385
+        },
+        "http_req_connecting": {
+            "p(95)": 0,
+            "avg": 0.007034218227181044,
+            "min": 0,
+            "med": 0,
+            "max": 23.0607,
+            "p(90)": 0
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_duration{load_stage:stage_1000}": {
+            "p(90)": 9.674420000000016,
+            "p(95)": 13.7608,
+            "avg": 7.0608175823939625,
+            "min": 1.5131,
+            "med": 6.09115,
+            "max": 151.333,
+            "thresholds": {
+                "p(95)<5000": false
+            }
+        },
+        "http_req_receiving": {
+            "avg": 0.4469577052219217,
+            "min": 0,
+            "med": 0,
+            "max": 119.6437,
+            "p(90)": 0.8554,
+            "p(95)": 1.0102
+        }
+    },
+    "setup_data": {
+        "adminToken": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI2IiwiZW1haWwiOiJhZG1pbkByb29tLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc4MTc3NjM2NSwiZXhwIjoxNzgxNzc5OTY1fQ.HCQ8uP0JdIyIVIerLP3MiLwZJG7jeCIaF0lCe9xOm6eOu_N2TgZvBsX2VZaX6V5z",
+        "pageSize": 50,
+        "roomId": 34,
+        "seedReservations": 1000
+    },
+    "root_group": {
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "setup": {
+                "name": "setup",
+                "path": "::setup",
+                "id": "5c0f8025f7e0b6654089e5b00e950f1a",
+                "groups": {},
+                "checks": {
+                        "login returns 200": {
+                            "path": "::setup::login returns 200",
+                            "id": "9aeb1edb646b9367e57e5c4c5d6d7f61",
+                            "passes": 201,
+                            "fails": 0,
+                            "name": "login returns 200"
+                        },
+                        "login returns accessToken": {
+                            "path": "::setup::login returns accessToken",
+                            "id": "5e6ea6eda796e7727324f0eba72529e3",
+                            "passes": 201,
+                            "fails": 0,
+                            "name": "login returns accessToken"
+                        },
+                        "create room returns 201 or duplicate": {
+                            "name": "create room returns 201 or duplicate",
+                            "path": "::setup::create room returns 201 or duplicate",
+                            "id": "922fefbd6a85789ab7cd2346e58653b0",
+                            "passes": 1,
+                            "fails": 0
+                        },
+                        "register returns 201 or already exists": {
+                            "name": "register returns 201 or already exists",
+                            "path": "::setup::register returns 201 or already exists",
+                            "id": "ea563b9e50fbf2acf2b159a3cca41542",
+                            "passes": 200,
+                            "fails": 0
+                        },
+                        "seed reservation returns 201": {
+                            "name": "seed reservation returns 201",
+                            "path": "::setup::seed reservation returns 201",
+                            "id": "eeb432e4cdfde0b638827720d21678d0",
+                            "passes": 1000,
+                            "fails": 0
+                        }
+                    }
+            }
+        },
+        "checks": {
+            "admin room reservations returns 200": {
+                "name": "admin room reservations returns 200",
+                "path": "::admin room reservations returns 200",
+                "id": "4049ff85866bc6db49d1420e1b26fa79",
+                "passes": 170144,
+                "fails": 0
+            },
+            "admin room reservations returns one page": {
+                "path": "::admin room reservations returns one page",
+                "id": "1ba5b41d828af25bde8905c443a0d964",
+                "passes": 170144,
+                "fails": 0,
+                "name": "admin room reservations returns one page"
+            },
+            "admin room reservations reports total elements": {
+                "path": "::admin room reservations reports total elements",
+                "id": "6e398145afe81ee5224f997688bf95d6",
+                "passes": 170144,
+                "fails": 0,
+                "name": "admin room reservations reports total elements"
+            },
+            "admin room reservations returns target room only": {
+                "fails": 0,
+                "name": "admin room reservations returns target room only",
+                "path": "::admin room reservations returns target room only",
+                "id": "79a273dda6fae150f3b51a4706e8e962",
+                "passes": 170144
+            }
+        },
+        "name": "",
+        "path": ""
+    }
+}

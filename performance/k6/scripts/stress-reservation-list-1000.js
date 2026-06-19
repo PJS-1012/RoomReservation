@@ -79,7 +79,7 @@ export default function (data) {
   const params = jsonHeaders(data.userTokens[userIndex]);
   params.tags = { load_stage: currentLoadStage() };
 
-  const res = http.get(`${BASE_URL}/reservations`, params);
+  const res = http.get(`${BASE_URL}/reservations?page=0&size=50`, params);
 
   check(res, {
     'reservation list returns 200': (r) => r.status === 200,
@@ -89,7 +89,9 @@ export default function (data) {
       }
 
       const body = r.json();
-      return Array.isArray(body) && body.length === data.reservationsPerUser;
+      return Array.isArray(body.content)
+        && body.content.length === data.reservationsPerUser
+        && body.totalElements === data.reservationsPerUser;
     },
   });
 

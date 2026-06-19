@@ -1,5 +1,6 @@
 package com.pjs.roomreservation.controller;
 
+import com.pjs.roomreservation.dto.PageResponseDto;
 import com.pjs.roomreservation.dto.reservation.AdminReservationResponseDto;
 import com.pjs.roomreservation.dto.room.RoomCreateDto;
 import com.pjs.roomreservation.dto.room.RoomUpdateDto;
@@ -10,8 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -48,20 +47,11 @@ public class AdminRoomController {
 
     @GetMapping("/rooms/{roomId}/reservations")
     @Operation(summary = "회의실 별 예약 확인")
-    public List<AdminReservationResponseDto> reservations(@PathVariable Long roomId) {
-        return reservationService.showRoomReservationsForAdmin(roomId).stream()
-                .map(reservation -> new AdminReservationResponseDto(
-                        reservation.getId(),
-                        reservation.getRoom().getId(),
-                        reservation.getRoom().getName(),
-                        reservation.getUser().getId(),
-                        reservation.getUser().getName(),
-                        reservation.getUser().getEmail(),
-                        reservation.getStartAt(),
-                        reservation.getEndAt(),
-                        reservation.isCanceled(),
-                        reservation.getCreatedAt()
-                ))
-                .toList();
+    public PageResponseDto<AdminReservationResponseDto> reservations(
+            @PathVariable Long roomId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size
+    ) {
+        return reservationService.showRoomReservationsForAdmin(roomId, page, size);
     }
 }

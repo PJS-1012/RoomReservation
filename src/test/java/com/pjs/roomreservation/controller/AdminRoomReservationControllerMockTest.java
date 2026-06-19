@@ -82,20 +82,21 @@ class AdminRoomReservationControllerMockTest {
         Reservation reservation = createReservation(user, room, 10, 10);
         String adminToken = login(admin.getEmail());
 
-        mockMvc.perform(get("/admin/rooms/{roomId}/reservations", room.getId())
+        mockMvc.perform(get("/admin/rooms/{roomId}/reservations?page=0&size=50", room.getId())
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].reservationId").value(reservation.getId()))
-                .andExpect(jsonPath("$[0].roomId").value(room.getId()))
-                .andExpect(jsonPath("$[0].roomName").value(room.getName()))
-                .andExpect(jsonPath("$[0].userId").value(user.getId()))
-                .andExpect(jsonPath("$[0].userName").value(user.getName()))
-                .andExpect(jsonPath("$[0].userEmail").value(user.getEmail()))
-                .andExpect(jsonPath("$[0].startAt").exists())
-                .andExpect(jsonPath("$[0].endAt").exists())
-                .andExpect(jsonPath("$[0].canceled").value(false))
-                .andExpect(jsonPath("$[0].createdAt").exists());
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].reservationId").value(reservation.getId()))
+                .andExpect(jsonPath("$.content[0].roomId").value(room.getId()))
+                .andExpect(jsonPath("$.content[0].roomName").value(room.getName()))
+                .andExpect(jsonPath("$.content[0].userId").value(user.getId()))
+                .andExpect(jsonPath("$.content[0].userName").value(user.getName()))
+                .andExpect(jsonPath("$.content[0].userEmail").value(user.getEmail()))
+                .andExpect(jsonPath("$.content[0].startAt").exists())
+                .andExpect(jsonPath("$.content[0].endAt").exists())
+                .andExpect(jsonPath("$.content[0].canceled").value(false))
+                .andExpect(jsonPath("$.content[0].createdAt").exists())
+                .andExpect(jsonPath("$.totalElements").value(1));
     }
 
     @Test
@@ -120,7 +121,7 @@ class AdminRoomReservationControllerMockTest {
     }
 
     @Test
-    void admin_room_reservations_return_all_rows_even_when_page_parameters_are_sent() throws Exception {
+    void admin_room_reservations_support_paging() throws Exception {
         User admin = createUser("admin-paging@test.com", true);
         User user = createUser("user-paging@test.com", false);
         Room room = createRoom("admin-paging-room");
@@ -132,6 +133,11 @@ class AdminRoomReservationControllerMockTest {
         mockMvc.perform(get("/admin/rooms/{roomId}/reservations?page=0&size=2", room.getId())
                         .header("Authorization", "Bearer " + adminToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.page").value(0))
+                .andExpect(jsonPath("$.size").value(2))
+                .andExpect(jsonPath("$.totalElements").value(3))
+                .andExpect(jsonPath("$.totalPages").value(2))
+                .andExpect(jsonPath("$.last").value(false));
     }
 }

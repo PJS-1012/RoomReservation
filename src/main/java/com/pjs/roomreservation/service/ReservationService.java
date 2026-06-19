@@ -1,24 +1,29 @@
 package com.pjs.roomreservation.service;
 
 import com.pjs.roomreservation.domain.Reservation;
+import com.pjs.roomreservation.dto.PageResponseDto;
+import com.pjs.roomreservation.dto.reservation.AdminReservationResponseDto;
+import com.pjs.roomreservation.dto.reservation.ReservationResponseDto;
 import com.pjs.roomreservation.repository.ReservationRepository;
 import com.pjs.roomreservation.repository.RoomRepository;
 import com.pjs.roomreservation.service.exception.ReservationConflictException;
 import com.pjs.roomreservation.service.exception.ReservationForbiddenException;
 import com.pjs.roomreservation.service.exception.ReservationNotFoundException;
 import com.pjs.roomreservation.service.exception.RoomNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 public class ReservationService {
     private static final Duration MIN_RESERVATION_DURATION = Duration.ofMinutes(30);
     private static final Duration MAX_RESERVATION_DURATION = Duration.ofHours(4);
+    private static final int MAX_PAGE_SIZE = 100;
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
     private final UserService userService;
@@ -62,16 +67,32 @@ public class ReservationService {
         return reservation.getId();
     }
 
-    public List<Reservation> showList(Long userId){
+    public PageResponseDto<ReservationResponseDto> showList(Long userId, int page, int size){
         userService.getActiveById(userId);
 
-        return reservationRepository.findAllByUserIdOrderByStartAtDesc(userId);
+        Pageable pageable = createPageable(page, size);
+        return PageResponseDto.from(
+                reservationRepository.findReservationResponsesByUserId(userId, pageable)
+        );
     }
 
-    public List<Reservation> showRoomReservationsForAdmin(Long roomId) {
+    public PageResponseDto<AdminReservationResponseDto> showRoomReservationsForAdmin(
+            Long roomId,
+            int page,
+            int size
+    ) {
         roomRepository.findByIdAndActiveTrue(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));
 
-        return reservationRepository.findAllByRoomIdOrderByCreatedAtDescIdDesc(roomId);
+        Pageable pageable = createPageable(page, size);
+        return PageResponseDto.from(
+                reservationRepository.findAdminReservationResponsesByRoomId(roomId, pageable)
+        );
+    }
+
+    private Pageable createPageable(int page, int size) {
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), MAX_PAGE_SIZE);
+        return PageRequest.of(safePage, safeSize);
     }
 
     @Transactional
