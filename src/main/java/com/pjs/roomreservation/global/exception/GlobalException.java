@@ -3,13 +3,14 @@ package com.pjs.roomreservation.global.exception;
 import com.pjs.roomreservation.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -68,8 +69,17 @@ public class GlobalException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException e){
+        return validationError(e.getBindingResult());
+    }
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ApiError> handleBindException(BindException e) {
+        return validationError(e.getBindingResult());
+    }
+
+    private ResponseEntity<ApiError> validationError(BindingResult bindingResult) {
         Map<String, String> error = new LinkedHashMap<>();
-        for(FieldError fe : e.getBindingResult().getFieldErrors()){
+        for(FieldError fe : bindingResult.getFieldErrors()){
             error.put(fe.getField(), fe.getDefaultMessage());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiError.of("Validation_Error", "요청 값이 올바르지 않습니다.", error));

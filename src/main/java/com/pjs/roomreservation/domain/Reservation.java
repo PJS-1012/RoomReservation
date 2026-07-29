@@ -5,7 +5,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reservation")
+@Table(
+        name = "reservation",
+        indexes = @Index(
+                name = "idx_reservation_room_active_time",
+                columnList = "room_id, canceled, start_at, end_at"
+        )
+)
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
