@@ -1,9 +1,11 @@
 package com.pjs.roomreservation.service;
 
 import com.pjs.roomreservation.domain.Room;
+import com.pjs.roomreservation.global.cache.RoomCacheEvictEvent;
 import com.pjs.roomreservation.repository.RoomRepository;
 import com.pjs.roomreservation.service.exception.DuplicateRoomNameException;
 import com.pjs.roomreservation.service.exception.RoomNotFoundException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +15,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class RoomService {
     private final RoomRepository roomRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public RoomService(RoomRepository roomRepository) {
+    public RoomService(RoomRepository roomRepository, ApplicationEventPublisher eventPublisher) {
         this.roomRepository = roomRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -27,6 +31,7 @@ public class RoomService {
         Room room = new Room(name, location, capacity);
 
         roomRepository.save(room);
+        eventPublisher.publishEvent(new RoomCacheEvictEvent());
 
         return room.getId();
     }
@@ -48,6 +53,7 @@ public class RoomService {
         }
 
         room.update(name, location, capacity);
+        eventPublisher.publishEvent(new RoomCacheEvictEvent());
     }
 
     @Transactional
@@ -55,5 +61,6 @@ public class RoomService {
         Room room = getActiveById(id);
 
         room.deactivate();
+        eventPublisher.publishEvent(new RoomCacheEvictEvent());
     }
 }

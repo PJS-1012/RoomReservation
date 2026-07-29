@@ -1,6 +1,7 @@
 package com.pjs.roomreservation.controller;
 
 import com.pjs.roomreservation.dto.room.RoomResponseDto;
+import com.pjs.roomreservation.service.RoomQueryService;
 import com.pjs.roomreservation.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,16 +18,17 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
+    private final RoomQueryService roomQueryService;
 
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, RoomQueryService roomQueryService) {
         this.roomService = roomService;
+        this.roomQueryService = roomQueryService;
     }
 
     @GetMapping
     @Operation(summary = "모든 회의실 정보 불러오기")
     public List<RoomResponseDto> list() {
-        return roomService.listRoom().stream()
-                .map(r -> new RoomResponseDto(r.getId(), r.getName(), r.getLocation(), r.getCapacity(), r.isActive(), r.getCreatedAt())).toList();
+        return roomQueryService.listActiveRooms();
     }
 
     @GetMapping("/{roomId}")
