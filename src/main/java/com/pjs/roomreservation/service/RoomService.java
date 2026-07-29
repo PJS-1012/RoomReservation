@@ -9,8 +9,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional(readOnly = true)
 public class RoomService {
@@ -38,10 +36,6 @@ public class RoomService {
 
     public Room getActiveById(Long id) {
         return roomRepository.findByIdAndActiveTrue(id).orElseThrow(()-> new RoomNotFoundException(id));
-    }
-
-    public List<Room> listRoom() {
-        return roomRepository.findAllByActiveTrueOrderByIdAsc();
     }
 
     @Transactional

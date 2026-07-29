@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class RoomCacheEvictIntegrationTest {
+class RoomCacheInvalidationIntegrationTest {
 
     @Autowired
     private RoomService roomService;
