@@ -27,11 +27,23 @@ public class AvailableRoomSearchDto {
         return startAt;
     }
 
+    public void setStartAt(LocalDateTime startAt) {
+        this.startAt = startAt;
+    }
+
     public LocalDateTime getEndAt() {
         return endAt;
     }
 
+    public void setEndAt(LocalDateTime endAt) {
+        this.endAt = endAt;
+    }
+
     public Integer getCapacity() {
         return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
     }
 }

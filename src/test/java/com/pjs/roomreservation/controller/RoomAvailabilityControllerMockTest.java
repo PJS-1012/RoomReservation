@@ -32,4 +32,15 @@ class RoomAvailabilityControllerMockTest {
                 .andExpect(jsonPath("$.code").value("Validation_Error"))
                 .andExpect(jsonPath("$.error.startAt").exists());
     }
+
+    @Test
+    @WithMockUser
+    void available_validQueryParameters_returnsOk() throws Exception {
+        mockMvc.perform(get("/rooms/available")
+                        .param("startAt", "2030-02-20T10:00:00")
+                        .param("endAt", "2030-02-20T11:00:00")
+                        .param("capacity", "4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray());
+    }
 }

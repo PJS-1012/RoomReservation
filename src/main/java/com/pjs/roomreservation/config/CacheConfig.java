@@ -1,6 +1,11 @@
 package com.pjs.roomreservation.config;
 
 import com.pjs.roomreservation.global.cache.CacheNames;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +24,32 @@ public class CacheConfig {
     private static final Duration AVAILABLE_ROOM_CACHE_TTL = Duration.ofMinutes(1);
 
     @Bean
-    public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
+    public GenericJackson2JsonRedisSerializer redisCacheValueSerializer() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.activateDefaultTyping(
+                BasicPolymorphicTypeValidator.builder()
+                        .allowIfSubType("com.pjs.roomreservation.")
+                        .allowIfSubType("java.time.")
+                        .allowIfSubType("java.util.")
+                        .build(),
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY
+        );
+
+        return new GenericJackson2JsonRedisSerializer(objectMapper);
+    }
+
+    @Bean
+    public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer(
+            GenericJackson2JsonRedisSerializer redisCacheValueSerializer
+    ) {
         RedisCacheConfiguration defaultConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(ROOM_CACHE_TTL)
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                        .fromSerializer(redisCacheValueSerializer));
 
         RedisCacheConfiguration availableRoomConfiguration = defaultConfiguration
                 .entryTtl(AVAILABLE_ROOM_CACHE_TTL);
