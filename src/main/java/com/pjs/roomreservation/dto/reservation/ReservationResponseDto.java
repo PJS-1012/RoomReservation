@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class ReservationResponseDto {
 
-    @Schema(description = "")
+    @Schema(description = "회의실 예약 ID", example = "1")
     private final Long id;
     private final Long roomId;
     private final String roomName;
