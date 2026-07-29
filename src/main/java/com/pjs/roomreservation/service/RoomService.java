@@ -1,7 +1,7 @@
 package com.pjs.roomreservation.service;
 
 import com.pjs.roomreservation.domain.Room;
-import com.pjs.roomreservation.global.cache.RoomCacheEvictEvent;
+import com.pjs.roomreservation.global.cache.RoomChangedEvent;
 import com.pjs.roomreservation.repository.RoomRepository;
 import com.pjs.roomreservation.service.exception.DuplicateRoomNameException;
 import com.pjs.roomreservation.service.exception.RoomNotFoundException;
@@ -31,7 +31,7 @@ public class RoomService {
         Room room = new Room(name, location, capacity);
 
         roomRepository.save(room);
-        eventPublisher.publishEvent(new RoomCacheEvictEvent());
+        eventPublisher.publishEvent(new RoomChangedEvent());
 
         return room.getId();
     }
@@ -53,7 +53,7 @@ public class RoomService {
         }
 
         room.update(name, location, capacity);
-        eventPublisher.publishEvent(new RoomCacheEvictEvent());
+        eventPublisher.publishEvent(new RoomChangedEvent());
     }
 
     @Transactional
@@ -61,6 +61,6 @@ public class RoomService {
         Room room = getActiveById(id);
 
         room.deactivate();
-        eventPublisher.publishEvent(new RoomCacheEvictEvent());
+        eventPublisher.publishEvent(new RoomChangedEvent());
     }
 }

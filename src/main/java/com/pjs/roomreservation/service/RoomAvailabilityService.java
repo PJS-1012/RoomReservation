@@ -1,25 +1,24 @@
 package com.pjs.roomreservation.service;
 
-import com.pjs.roomreservation.dto.room.RoomResponseDto;
-import com.pjs.roomreservation.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import com.pjs.roomreservation.dto.room.RoomResponseDto;
 
 @Service
 @Transactional(readOnly = true)
 public class RoomAvailabilityService {
-    private final RoomRepository roomRepository;
     private final ReservationTimeValidator reservationTimeValidator;
+    private final RoomAvailabilityQueryService roomAvailabilityQueryService;
 
     public RoomAvailabilityService(
-            RoomRepository roomRepository,
-            ReservationTimeValidator reservationTimeValidator
+            ReservationTimeValidator reservationTimeValidator,
+            RoomAvailabilityQueryService roomAvailabilityQueryService
     ) {
-        this.roomRepository = roomRepository;
         this.reservationTimeValidator = reservationTimeValidator;
+        this.roomAvailabilityQueryService = roomAvailabilityQueryService;
     }
 
     public List<RoomResponseDto> findAvailableRooms(
@@ -33,6 +32,6 @@ public class RoomAvailabilityService {
             throw new IllegalArgumentException("수용 인원은 1명 이상이어야 합니다.");
         }
 
-        return roomRepository.findAvailableRoomResponses(startAt, endAt, capacity);
+        return roomAvailabilityQueryService.findAvailableRooms(startAt, endAt, capacity);
     }
 }

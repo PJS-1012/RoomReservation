@@ -4,6 +4,7 @@ import com.pjs.roomreservation.domain.Reservation;
 import com.pjs.roomreservation.dto.PageResponseDto;
 import com.pjs.roomreservation.dto.reservation.AdminReservationResponseDto;
 import com.pjs.roomreservation.dto.reservation.ReservationResponseDto;
+import com.pjs.roomreservation.global.cache.ReservationAvailabilityChangedEvent;
 import com.pjs.roomreservation.repository.ReservationRepository;
 import com.pjs.roomreservation.repository.RoomRepository;
 import com.pjs.roomreservation.service.exception.ReservationConflictException;
@@ -12,6 +13,7 @@ import com.pjs.roomreservation.service.exception.ReservationNotFoundException;
 import com.pjs.roomreservation.service.exception.RoomNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,17 +27,20 @@ public class ReservationService {
     private final RoomRepository roomRepository;
     private final UserService userService;
     private final ReservationTimeValidator reservationTimeValidator;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ReservationService(
             ReservationRepository reservationRepository,
             RoomRepository roomRepository,
             UserService userService,
-            ReservationTimeValidator reservationTimeValidator
+            ReservationTimeValidator reservationTimeValidator,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.reservationRepository = reservationRepository;
         this.roomRepository = roomRepository;
         this.userService = userService;
         this.reservationTimeValidator = reservationTimeValidator;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -52,6 +57,7 @@ public class ReservationService {
 
         Reservation reservation = new Reservation(user, room, startAt, endAt);
         reservationRepository.save(reservation);
+        eventPublisher.publishEvent(new ReservationAvailabilityChangedEvent());
 
         return reservation.getId();
     }
@@ -96,6 +102,7 @@ public class ReservationService {
 
         if(!r.isCanceled()){
             r.cancel();
+            eventPublisher.publishEvent(new ReservationAvailabilityChangedEvent());
         }
     }
 

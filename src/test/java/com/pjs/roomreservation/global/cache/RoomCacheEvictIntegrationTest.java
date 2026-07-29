@@ -24,15 +24,19 @@ class RoomCacheEvictIntegrationTest {
     @AfterEach
     void clearCache() {
         cacheManager.getCache(CacheNames.ROOMS).clear();
+        cacheManager.getCache(CacheNames.AVAILABLE_ROOMS).clear();
     }
 
     @Test
-    void create_evictsRoomListCache_afterTransactionCommit() {
-        Cache cache = cacheManager.getCache(CacheNames.ROOMS);
-        cache.put("active", "stale-value");
+    void create_evictsRoomCaches_afterTransactionCommit() {
+        Cache roomCache = cacheManager.getCache(CacheNames.ROOMS);
+        Cache availableRoomCache = cacheManager.getCache(CacheNames.AVAILABLE_ROOMS);
+        roomCache.put("active", "stale-value");
+        availableRoomCache.put("stale-key", "stale-value");
 
         roomService.create("Cache Eviction Room", "3F", 4);
 
-        assertThat(cache.get("active")).isNull();
+        assertThat(roomCache.get("active")).isNull();
+        assertThat(availableRoomCache.get("stale-key")).isNull();
     }
 }

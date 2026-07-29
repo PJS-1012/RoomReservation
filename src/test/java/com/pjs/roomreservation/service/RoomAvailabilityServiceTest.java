@@ -4,12 +4,15 @@ import com.pjs.roomreservation.domain.Reservation;
 import com.pjs.roomreservation.domain.Room;
 import com.pjs.roomreservation.domain.User;
 import com.pjs.roomreservation.dto.room.RoomResponseDto;
+import com.pjs.roomreservation.global.cache.CacheNames;
 import com.pjs.roomreservation.repository.ReservationRepository;
 import com.pjs.roomreservation.repository.RoomRepository;
 import com.pjs.roomreservation.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,14 @@ class RoomAvailabilityServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @AfterEach
+    void clearCache() {
+        cacheManager.getCache(CacheNames.AVAILABLE_ROOMS).clear();
+    }
 
     @Test
     void findAvailableRooms_excludesOverlappingAndInsufficientRooms() {
@@ -71,5 +82,29 @@ class RoomAvailabilityServiceTest {
         );
 
         assertThat(result).extracting(RoomResponseDto::getId).contains(room.getId());
+    }
+
+    @Test
+    void findAvailableRooms_returnsCachedResult_forSameSearchCondition() {
+        LocalDateTime startAt = LocalDateTime.now().plusDays(1).withMinute(0).withSecond(0).withNano(0);
+        Room firstRoom = roomRepository.save(new Room("Cached First Room", "3F", 4));
+
+        List<RoomResponseDto> firstResult = roomAvailabilityService.findAvailableRooms(
+                startAt,
+                startAt.plusHours(1),
+                4
+        );
+        Room laterRoom = roomRepository.save(new Room("Cached Later Room", "3F", 4));
+
+        List<RoomResponseDto> cachedResult = roomAvailabilityService.findAvailableRooms(
+                startAt,
+                startAt.plusHours(1),
+                4
+        );
+
+        assertThat(firstResult).extracting(RoomResponseDto::getId).contains(firstRoom.getId());
+        assertThat(cachedResult).extracting(RoomResponseDto::getId)
+                .contains(firstRoom.getId())
+                .doesNotContain(laterRoom.getId());
     }
 }

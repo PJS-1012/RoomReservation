@@ -1,7 +1,8 @@
 package com.pjs.roomreservation.dto.room;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 
 import java.time.LocalDateTime;
 @Schema(description = "회의실 정보 DTO")
@@ -22,7 +23,15 @@ public class RoomResponseDto {
 
     private final LocalDateTime createdAt;
 
-    public RoomResponseDto(Long id, String name, String location, int capacity, boolean active, LocalDateTime createdAt) {
+    @JsonCreator
+    public RoomResponseDto(
+            @JsonProperty("id") Long id,
+            @JsonProperty("name") String name,
+            @JsonProperty("location") String location,
+            @JsonProperty("capacity") int capacity,
+            @JsonProperty("active") boolean active,
+            @JsonProperty("createdAt") LocalDateTime createdAt
+    ) {
         this.id = id;
         this.name = name;
         this.location = location;
