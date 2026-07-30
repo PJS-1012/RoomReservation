@@ -3,13 +3,16 @@ package com.pjs.roomreservation.config;
 import com.pjs.roomreservation.domain.User;
 import com.pjs.roomreservation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class BootstrapAdminInitializer {
 
     private final UserRepository userRepository;
@@ -19,17 +22,20 @@ public class BootstrapAdminInitializer {
     @Bean
     public ApplicationRunner initAdmin() {
         return args -> {
+            try {
+                if (userRepository.existsByEmail(props.email())) return;
 
-            if (userRepository.existsByEmail(props.email())) return;
+                User admin = new User(
+                        props.email(),
+                        passwordEncoder.encode(props.password()),
+                        props.name()
+                );
 
-            User admin = new User(
-                    props.email(),
-                    passwordEncoder.encode(props.password()),
-                    props.name()
-            );
-
-            admin.setAdmin();
-            userRepository.save(admin);
+                admin.setAdmin();
+                userRepository.saveAndFlush(admin);
+            } catch (DataIntegrityViolationException e) {
+                log.info("Bootstrap admin was created by another instance. email={}", props.email());
+            }
         };
     }
 }
