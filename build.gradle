@@ -28,6 +28,8 @@ dependencies {
 	// Cache
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// Distributed lock
+	implementation 'org.redisson:redisson:4.6.1'
 	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	// Security

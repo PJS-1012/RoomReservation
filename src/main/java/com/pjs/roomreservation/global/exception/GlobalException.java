@@ -52,6 +52,11 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiError.of("Reservation_Conflict", e.getMessage()));
     }
 
+    @ExceptionHandler(ReservationLockException.class)
+    public ResponseEntity<ApiError> handleReservationLock(ReservationLockException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiError.of("Reservation_Lock_Conflict", e.getMessage()));
+    }
+
     @ExceptionHandler(ReservationNotFoundException.class)
     public ResponseEntity<ApiError> handleReservationNotFound(ReservationNotFoundException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError.of("Reservation_Not_Found", e.getMessage()));
