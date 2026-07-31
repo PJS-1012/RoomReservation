@@ -7,10 +7,20 @@ import java.time.LocalDateTime;
 @Entity
 @Table(
         name = "reservation",
-        indexes = @Index(
-                name = "idx_reservation_room_active_time",
-                columnList = "room_id, canceled, start_at, end_at"
-        )
+        indexes = {
+                @Index(
+                        name = "idx_reservation_room_active_time",
+                        columnList = "room_id, canceled, start_at, end_at"
+                ),
+                @Index(
+                        name = "idx_reservation_user_start_at",
+                        columnList = "user_id, start_at"
+                ),
+                @Index(
+                        name = "idx_reservation_room_created_at_id",
+                        columnList = "room_id, created_at, id"
+                )
+        }
 )
 public class Reservation {
     @Id

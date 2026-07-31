@@ -1,6 +1,8 @@
 package com.pjs.roomreservation.global.exception;
 
 import com.pjs.roomreservation.service.exception.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalException {
+    private static final Logger log = LoggerFactory.getLogger(GlobalException.class);
 
     @ExceptionHandler(DuplicateEmailException.class)
     public ResponseEntity<ApiError> handleDuplicateEmail(DuplicateEmailException e){
@@ -92,6 +95,7 @@ public class GlobalException {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleEtc(Exception e){
+        log.error("unexpected_api_error", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiError.of("Internal_Error", "서버 오류"));
     }
 

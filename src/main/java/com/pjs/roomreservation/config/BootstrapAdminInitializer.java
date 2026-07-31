@@ -23,6 +23,11 @@ public class BootstrapAdminInitializer {
     public ApplicationRunner initAdmin() {
         return args -> {
             try {
+                if (props.email().isBlank() || props.password().isBlank() || props.name().isBlank()) {
+                    log.warn("Bootstrap admin initialization skipped because required properties are missing.");
+                    return;
+                }
+
                 if (userRepository.existsByEmail(props.email())) return;
 
                 User admin = new User(

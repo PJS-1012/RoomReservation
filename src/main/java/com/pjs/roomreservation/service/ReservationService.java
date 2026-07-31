@@ -11,6 +11,8 @@ import com.pjs.roomreservation.service.exception.ReservationConflictException;
 import com.pjs.roomreservation.service.exception.ReservationForbiddenException;
 import com.pjs.roomreservation.service.exception.ReservationNotFoundException;
 import com.pjs.roomreservation.service.exception.RoomNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 @Service
 @Transactional(readOnly = true)
 public class ReservationService {
+    private static final Logger log = LoggerFactory.getLogger(ReservationService.class);
     private static final int MAX_PAGE_SIZE = 100;
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
@@ -58,6 +61,14 @@ public class ReservationService {
         Reservation reservation = new Reservation(user, room, startAt, endAt);
         reservationRepository.save(reservation);
         eventPublisher.publishEvent(new ReservationAvailabilityChangedEvent());
+        log.atInfo()
+                .addKeyValue("event", "reservation_created")
+                .addKeyValue("reservationId", reservation.getId())
+                .addKeyValue("userId", userId)
+                .addKeyValue("roomId", roomId)
+                .addKeyValue("startAt", startAt)
+                .addKeyValue("endAt", endAt)
+                .log("reservation_created");
 
         return reservation.getId();
     }
@@ -103,6 +114,12 @@ public class ReservationService {
         if(!r.isCanceled()){
             r.cancel();
             eventPublisher.publishEvent(new ReservationAvailabilityChangedEvent());
+            log.atInfo()
+                    .addKeyValue("event", "reservation_canceled")
+                    .addKeyValue("reservationId", reservationId)
+                    .addKeyValue("userId", userId)
+                    .addKeyValue("roomId", r.getRoom().getId())
+                    .log("reservation_canceled");
         }
     }
 

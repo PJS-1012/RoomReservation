@@ -45,6 +45,9 @@ services:
       JWT_EXPIRATION_SECONDS: ${JWT_EXPIRATION_SECONDS:-3600}
       APP_RESERVATION_LOCK_ENABLED: ${RESERVATION_LOCK_ENABLED:-false}
       APP_RESERVATION_LOCK_WAIT_TIME: ${RESERVATION_LOCK_WAIT_TIME:-0ms}
+      APP_BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      APP_BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+      APP_BOOTSTRAP_ADMIN_NAME: ${BOOTSTRAP_ADMIN_NAME:-}
     expose:
       - "8080"
     depends_on:
@@ -58,6 +61,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
+    stop_grace_period: 25s
     restart: unless-stopped
 
   app-2:
@@ -73,6 +77,9 @@ services:
       JWT_EXPIRATION_SECONDS: ${JWT_EXPIRATION_SECONDS:-3600}
       APP_RESERVATION_LOCK_ENABLED: ${RESERVATION_LOCK_ENABLED:-false}
       APP_RESERVATION_LOCK_WAIT_TIME: ${RESERVATION_LOCK_WAIT_TIME:-0ms}
+      APP_BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      APP_BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+      APP_BOOTSTRAP_ADMIN_NAME: ${BOOTSTRAP_ADMIN_NAME:-}
     expose:
       - "8080"
     depends_on:
@@ -86,6 +93,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
+    stop_grace_period: 25s
     restart: unless-stopped
 
   nginx:
@@ -143,9 +151,31 @@ services:
       - "127.0.0.1:3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
     depends_on:
       prometheus:
+        condition: service_started
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:3.5.5
+    command: -config.file=/etc/loki/config.yml
+    ports:
+      - "127.0.0.1:3100:3100"
+    volumes:
+      - ./loki/config.yml:/etc/loki/config.yml:ro
+      - loki-data:/loki
+    restart: unless-stopped
+
+  alloy:
+    image: grafana/alloy:v1.10.2
+    command: run --server.http.listen-addr=0.0.0.0:12345 /etc/alloy/config.alloy
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      loki:
         condition: service_started
     restart: unless-stopped
 
@@ -154,3 +184,4 @@ volumes:
   redis-data:
   prometheus-data:
   grafana-data:
+  loki-data:
