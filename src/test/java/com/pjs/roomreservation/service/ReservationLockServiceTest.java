@@ -2,6 +2,7 @@ package com.pjs.roomreservation.service;
 
 import com.pjs.roomreservation.config.ReservationLockProperties;
 import com.pjs.roomreservation.service.exception.ReservationLockException;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -83,6 +84,6 @@ class ReservationLockServiceTest {
         ReservationLockProperties properties = new ReservationLockProperties();
         properties.setEnabled(enabled);
         properties.setWaitTime(Duration.ZERO);
-        return new ReservationLockService(reservationService, client, properties);
+        return new ReservationLockService(reservationService, client, properties, new SimpleMeterRegistry());
     }
 }
