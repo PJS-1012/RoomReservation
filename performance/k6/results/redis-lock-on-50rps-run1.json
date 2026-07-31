@@ -1,0 +1,202 @@
+{
+    "metrics": {
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 3005,
+            "value": 0
+        },
+        "iterations": {
+            "count": 3001,
+            "rate": 49.75541681179561
+        },
+        "data_sent": {
+            "count": 1360510,
+            "rate": 22556.72846605
+        },
+        "reservation_lock_conflicts": {
+            "count": 1,
+            "rate": 0.016579612399798604
+        },
+        "http_req_blocked": {
+            "avg": 0.009075374376039934,
+            "min": 0,
+            "med": 0,
+            "max": 6.4274,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "iteration_duration": {
+            "min": 4.5091,
+            "med": 6.9347,
+            "max": 29.8677,
+            "p(90)": 9.8928,
+            "p(95)": 10.854,
+            "avg": 7.412054048650446
+        },
+        "http_req_duration": {
+            "avg": 7.396160632279529,
+            "min": 4.5091,
+            "med": 6.8651,
+            "max": 92.7739,
+            "p(90)": 9.71816,
+            "p(95)": 10.57446
+        },
+        "reservation_database_conflicts": {
+            "rate": 49.722257586996015,
+            "count": 2999
+        },
+        "http_req_waiting": {
+            "avg": 7.3092326788685495,
+            "min": 4.5091,
+            "med": 6.8237,
+            "max": 91.7407,
+            "p(90)": 9.513200000000001,
+            "p(95)": 10.484859999999998
+        },
+        "vus_max": {
+            "max": 50,
+            "value": 50,
+            "min": 50
+        },
+        "http_reqs": {
+            "rate": 49.82173526139481,
+            "count": 3005
+        },
+        "http_req_duration{expected_response:true}": {
+            "p(90)": 9.71816,
+            "p(95)": 10.57446,
+            "avg": 7.396160632279529,
+            "min": 4.5091,
+            "med": 6.8651,
+            "max": 92.7739
+        },
+        "http_req_connecting": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.004701430948419301,
+            "min": 0,
+            "med": 0,
+            "max": 0.5525
+        },
+        "reservation_created": {
+            "count": 1,
+            "rate": 0.016579612399798604
+        },
+        "reservation_create_duration": {
+            "avg": 7.311615528157281,
+            "min": 4.5091,
+            "med": 6.8622,
+            "max": 29.8677,
+            "p(90)": 9.6902,
+            "p(95)": 10.5554,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "http_req_sending": {
+            "avg": 0.0024824958402662233,
+            "min": 0,
+            "med": 0,
+            "max": 0.5475,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "reservation_unexpected_failures": {
+            "count": 0,
+            "rate": 0,
+            "thresholds": {
+                "count==0": false
+            }
+        },
+        "http_req_receiving": {
+            "min": 0,
+            "med": 0,
+            "max": 3.5573,
+            "p(90)": 0.5043599999999999,
+            "p(95)": 0.52572,
+            "avg": 0.08444545757071552
+        },
+        "data_received": {
+            "count": 1757616,
+            "rate": 29140.592027684426
+        },
+        "checks": {
+            "passes": 3007,
+            "fails": 0,
+            "value": 1
+        }
+    },
+    "setup_data": {
+        "roomId": 18,
+        "slot": {
+            "endAt": "2030-01-01T00:30:00",
+            "startAt": "2030-01-01T00:00:00"
+        },
+        "userToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxOSIsImVtYWlsIjoibG9jay1jb21wYXJpc29uLTE3ODU0OTEwNTkyMDktMzUwODdAdGVzdC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc4NTQ5MTA1OSwiZXhwIjoxNzg1NDk0NjU5fQ.IQ1myVDoFTzZYJLAtByBWHTBuc-ryIDRPFua2sNQ0og"
+    },
+    "root_group": {
+        "groups": {
+            "setup": {
+                "path": "::setup",
+                "id": "5c0f8025f7e0b6654089e5b00e950f1a",
+                "groups": {},
+                "checks": {
+                        "login returns 200": {
+                            "id": "9aeb1edb646b9367e57e5c4c5d6d7f61",
+                            "passes": 2,
+                            "fails": 0,
+                            "name": "login returns 200",
+                            "path": "::setup::login returns 200"
+                        },
+                        "login returns accessToken": {
+                            "passes": 2,
+                            "fails": 0,
+                            "name": "login returns accessToken",
+                            "path": "::setup::login returns accessToken",
+                            "id": "5e6ea6eda796e7727324f0eba72529e3"
+                        },
+                        "register returns 201 or already exists": {
+                            "path": "::setup::register returns 201 or already exists",
+                            "id": "ea563b9e50fbf2acf2b159a3cca41542",
+                            "passes": 1,
+                            "fails": 0,
+                            "name": "register returns 201 or already exists"
+                        },
+                        "create room returns 201 or duplicate": {
+                            "name": "create room returns 201 or duplicate",
+                            "path": "::setup::create room returns 201 or duplicate",
+                            "id": "922fefbd6a85789ab7cd2346e58653b0",
+                            "passes": 1,
+                            "fails": 0
+                        }
+                    },
+                "name": "setup"
+            }
+        },
+        "checks": {
+            "reservation request returns 201 or 409": {
+                "name": "reservation request returns 201 or 409",
+                "path": "::reservation request returns 201 or 409",
+                "id": "08e66448c465e24ff1631ca18483cf81",
+                "passes": 3001,
+                "fails": 0
+            }
+        },
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e"
+    }
+}

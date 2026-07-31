@@ -1,0 +1,202 @@
+{
+    "setup_data": {
+        "roomId": 32,
+        "slot": {
+            "endAt": "2030-01-01T00:30:00",
+            "startAt": "2030-01-01T00:00:00"
+        },
+        "userToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMyIsImVtYWlsIjoibG9jay1jb21wYXJpc29uLTE3ODU0OTIxMDkxMzYtNTE5ODRAdGVzdC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc4NTQ5MjEwOSwiZXhwIjoxNzg1NDk1NzA5fQ.awKDYjKy7EegpSGEy0UxzDYMYdJNUTOdBC003xsTbJA"
+    },
+    "root_group": {
+        "groups": {
+            "setup": {
+                "name": "setup",
+                "path": "::setup",
+                "id": "5c0f8025f7e0b6654089e5b00e950f1a",
+                "groups": {},
+                "checks": {
+                        "login returns 200": {
+                            "passes": 2,
+                            "fails": 0,
+                            "name": "login returns 200",
+                            "path": "::setup::login returns 200",
+                            "id": "9aeb1edb646b9367e57e5c4c5d6d7f61"
+                        },
+                        "login returns accessToken": {
+                            "id": "5e6ea6eda796e7727324f0eba72529e3",
+                            "passes": 2,
+                            "fails": 0,
+                            "name": "login returns accessToken",
+                            "path": "::setup::login returns accessToken"
+                        },
+                        "register returns 201 or already exists": {
+                            "name": "register returns 201 or already exists",
+                            "path": "::setup::register returns 201 or already exists",
+                            "id": "ea563b9e50fbf2acf2b159a3cca41542",
+                            "passes": 1,
+                            "fails": 0
+                        },
+                        "create room returns 201 or duplicate": {
+                            "path": "::setup::create room returns 201 or duplicate",
+                            "id": "922fefbd6a85789ab7cd2346e58653b0",
+                            "passes": 1,
+                            "fails": 0,
+                            "name": "create room returns 201 or duplicate"
+                        }
+                    }
+            }
+        },
+        "checks": {
+            "reservation request returns 201 or 409": {
+                "name": "reservation request returns 201 or 409",
+                "path": "::reservation request returns 201 or 409",
+                "id": "08e66448c465e24ff1631ca18483cf81",
+                "passes": 18001,
+                "fails": 0
+            }
+        },
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "metrics": {
+        "http_req_duration": {
+            "p(90)": 6.463300000000001,
+            "p(95)": 7.928519999999997,
+            "avg": 4.780048014440439,
+            "min": 1.0409,
+            "med": 4.3967,
+            "max": 83.1219
+        },
+        "http_req_tls_handshaking": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0
+        },
+        "reservation_created": {
+            "count": 1,
+            "rate": 0.01659094674707927
+        },
+        "vus_max": {
+            "value": 200,
+            "min": 200,
+            "max": 200
+        },
+        "reservation_create_duration": {
+            "avg": 4.767424154213657,
+            "min": 1.0409,
+            "med": 4.3959,
+            "max": 42.8718,
+            "p(90)": 6.4552,
+            "p(95)": 7.9172,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 2
+        },
+        "http_reqs": {
+            "count": 18005,
+            "rate": 298.71999618116223
+        },
+        "http_req_failed": {
+            "fails": 18005,
+            "passes": 0,
+            "value": 0
+        },
+        "reservation_lock_conflicts": {
+            "count": 2942,
+            "rate": 48.810565329907206
+        },
+        "checks": {
+            "passes": 18007,
+            "fails": 0,
+            "value": 1
+        },
+        "data_sent": {
+            "count": 8155510,
+            "rate": 135307.63210527244
+        },
+        "reservation_unexpected_failures": {
+            "count": 0,
+            "rate": 0,
+            "thresholds": {
+                "count==0": false
+            }
+        },
+        "http_req_receiving": {
+            "min": 0,
+            "med": 0,
+            "max": 11.0543,
+            "p(90)": 0.5241,
+            "p(95)": 0.53128,
+            "avg": 0.13944335462371538
+        },
+        "iteration_duration": {
+            "p(90)": 6.7273,
+            "p(95)": 8.0151,
+            "avg": 4.869145519693366,
+            "min": 1.0409,
+            "med": 4.6384,
+            "max": 42.8718
+        },
+        "data_received": {
+            "count": 10670792,
+            "rate": 177038.54182115948
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 4.780048014440439,
+            "min": 1.0409,
+            "med": 4.3967,
+            "max": 83.1219,
+            "p(90)": 6.463300000000001,
+            "p(95)": 7.928519999999997
+        },
+        "http_req_waiting": {
+            "avg": 4.63914505415163,
+            "min": 1.0409,
+            "med": 4.2266,
+            "max": 82.0992,
+            "p(90)": 6.30324,
+            "p(95)": 7.758019999999994
+        },
+        "reservation_database_conflicts": {
+            "count": 15058,
+            "rate": 249.82647611751963
+        },
+        "http_req_blocked": {
+            "avg": 0.005955018050541515,
+            "min": 0,
+            "med": 0,
+            "max": 5.7336,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_connecting": {
+            "min": 0,
+            "med": 0,
+            "max": 0.8386,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.005044820883088029
+        },
+        "http_req_sending": {
+            "avg": 0.00145960566509303,
+            "min": 0,
+            "med": 0,
+            "max": 0.898,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "iterations": {
+            "count": 18001,
+            "rate": 298.65363239417394
+        }
+    }
+}

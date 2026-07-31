@@ -85,3 +85,48 @@ Invoke-RestMethod http://localhost:8080/actuator/metrics/hikaricp.connections.ma
 `baseline-`으로 시작하는 파일은 개선 전 결과다.
 
 `after-optimization-`으로 시작하는 파일은 개선 후 결과다.
+
+## Redis Lock 비교
+
+Redis Lock 비교는 Docker Compose로 app-1, app-2, Nginx, MySQL, Redis, Prometheus, Grafana가 실행 중인 상태에서 수행한다.
+
+```powershell
+k6 run `
+  --summary-export performance/k6/results/redis-lock-off-50rps.json `
+  performance/k6/scripts/reservation-lock-comparison.js
+```
+
+동일 조건에서 `.env`의 `RESERVATION_LOCK_ENABLED=true`로 변경한 뒤 app-1, app-2만 재생성하고 다시 실행한다.
+
+```powershell
+docker compose up -d --force-recreate app-1 app-2
+
+k6 run `
+  --summary-export performance/k6/results/redis-lock-on-50rps.json `
+  performance/k6/scripts/reservation-lock-comparison.js
+```
+
+기본값은 50 req/s, 60초다. `RATE`, `DURATION`, `PRE_ALLOCATED_VUS`, `MAX_VUS` 환경 변수로 부하를 조절한다.
+
+```powershell
+$env:RATE=150
+$env:DURATION='60s'
+k6 run performance/k6/scripts/reservation-lock-comparison.js
+```
+
+비교 시 `reservation_create_duration`, `reservation_database_conflicts`, `reservation_lock_conflicts`, HikariCP pending, Redis Lock outcome을 함께 기록한다.
+
+## App Rolling Restart
+
+두 애플리케이션 인스턴스를 동시에 재생성하면 Nginx가 처리할 upstream이 없어 일시적으로 `502 Bad Gateway`가 발생할 수 있다. 앱 이미지를 교체할 때는 한 인스턴스가 `healthy`가 된 뒤 다음 인스턴스를 교체한다.
+
+```powershell
+docker compose up -d --force-recreate --no-deps app-1
+docker compose ps app-1
+
+# app-1이 healthy가 된 것을 확인한 후
+docker compose up -d --force-recreate --no-deps app-2
+docker compose ps app-2
+```
+
+Spring Boot graceful shutdown과 Docker `stop_grace_period`가 진행 중 요청의 종료 시간을 제공한다. Nginx는 단일 연결 실패만으로 upstream을 제외하지 않도록 `max_fails=3`으로 설정한다.

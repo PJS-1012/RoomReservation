@@ -1,0 +1,198 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "setup": {
+                "path": "::setup",
+                "id": "5c0f8025f7e0b6654089e5b00e950f1a",
+                "groups": {},
+                "checks": {
+                        "login returns 200": {
+                            "path": "::setup::login returns 200",
+                            "id": "9aeb1edb646b9367e57e5c4c5d6d7f61",
+                            "passes": 2,
+                            "fails": 0,
+                            "name": "login returns 200"
+                        },
+                        "login returns accessToken": {
+                            "passes": 2,
+                            "fails": 0,
+                            "name": "login returns accessToken",
+                            "path": "::setup::login returns accessToken",
+                            "id": "5e6ea6eda796e7727324f0eba72529e3"
+                        },
+                        "register returns 201 or already exists": {
+                            "id": "ea563b9e50fbf2acf2b159a3cca41542",
+                            "passes": 1,
+                            "fails": 0,
+                            "name": "register returns 201 or already exists",
+                            "path": "::setup::register returns 201 or already exists"
+                        },
+                        "create room returns 201 or duplicate": {
+                            "id": "922fefbd6a85789ab7cd2346e58653b0",
+                            "passes": 1,
+                            "fails": 0,
+                            "name": "create room returns 201 or duplicate",
+                            "path": "::setup::create room returns 201 or duplicate"
+                        }
+                    },
+                "name": "setup"
+            }
+        },
+        "checks": {
+            "reservation request returns 201 or 409": {
+                "id": "08e66448c465e24ff1631ca18483cf81",
+                "passes": 3001,
+                "fails": 0,
+                "name": "reservation request returns 201 or 409",
+                "path": "::reservation request returns 201 or 409"
+            }
+        }
+    },
+    "metrics": {
+        "reservation_created": {
+            "count": 1,
+            "rate": 0.016593118994174507
+        },
+        "reservation_create_duration": {
+            "p(90)": 6.8955,
+            "p(95)": 7.5627,
+            "avg": 5.743642219260239,
+            "min": 3.02,
+            "med": 5.5813,
+            "max": 16.2486,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "http_req_connecting": {
+            "med": 0,
+            "max": 0.7468,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.004669717138103162,
+            "min": 0
+        },
+        "reservation_database_conflicts": {
+            "count": 3000,
+            "rate": 49.779356982523524
+        },
+        "checks": {
+            "passes": 3007,
+            "fails": 0,
+            "value": 1
+        },
+        "http_req_tls_handshaking": {
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0
+        },
+        "vus": {
+            "value": 0,
+            "min": 0,
+            "max": 0
+        },
+        "http_req_blocked": {
+            "med": 0,
+            "max": 6.2199,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.0072432612312812,
+            "min": 0
+        },
+        "http_req_receiving": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.03620475873544097,
+            "min": 0,
+            "med": 0,
+            "max": 5.3779
+        },
+        "vus_max": {
+            "value": 50,
+            "min": 50,
+            "max": 50
+        },
+        "reservation_unexpected_failures": {
+            "count": 0,
+            "rate": 0,
+            "thresholds": {
+                "count==0": false
+            }
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 3005,
+            "value": 0
+        },
+        "http_reqs": {
+            "count": 3005,
+            "rate": 49.862322577494396
+        },
+        "data_sent": {
+            "rate": 22575.10432276436,
+            "count": 1360510
+        },
+        "http_req_duration": {
+            "avg": 5.815402928452572,
+            "min": 3.02,
+            "med": 5.583,
+            "max": 79.5078,
+            "p(90)": 6.901999999999999,
+            "p(95)": 7.573879999999999
+        },
+        "http_req_sending": {
+            "avg": 0.002289783693843594,
+            "min": 0,
+            "med": 0,
+            "max": 0.5257,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "iterations": {
+            "count": 3001,
+            "rate": 49.7959501015177
+        },
+        "iteration_duration": {
+            "max": 16.2486,
+            "p(90)": 6.959,
+            "p(95)": 7.6369,
+            "avg": 5.793196401199599,
+            "min": 3.02,
+            "med": 5.6132
+        },
+        "http_req_waiting": {
+            "min": 3.02,
+            "med": 5.5708,
+            "max": 79.5078,
+            "p(90)": 6.86398,
+            "p(95)": 7.467999999999996,
+            "avg": 5.776908386023291
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 5.815402928452572,
+            "min": 3.02,
+            "med": 5.583,
+            "max": 79.5078,
+            "p(90)": 6.901999999999999,
+            "p(95)": 7.573879999999999
+        },
+        "data_received": {
+            "count": 1757563,
+            "rate": 29163.45199875833
+        }
+    },
+    "setup_data": {
+        "roomId": 19,
+        "slot": {
+            "startAt": "2030-01-01T00:00:00",
+            "endAt": "2030-01-01T00:30:00"
+        },
+        "userToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMCIsImVtYWlsIjoibG9jay1jb21wYXJpc29uLTE3ODU0OTExMjk4ODEtNTAwODVAdGVzdC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc4NTQ5MTEzMCwiZXhwIjoxNzg1NDk0NzMwfQ.OZmfcJ-iTYiTACw7E-CnOFlc0OqSgCW1_Zl1Xk9plOY"
+    }
+}
