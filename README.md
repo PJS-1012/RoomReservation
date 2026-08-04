@@ -27,8 +27,8 @@ Client
 
 ### Cache strategy
 
-- `rooms`: 활성 회의실 목록을 Cache Aside로 저장합니다.
-- `availableRooms`: 시작/종료 시각과 수용 인원을 포함한 키로 예약 가능 회의실 조회 결과를 저장합니다.
+- `rooms`: 활성 회의실 목록을 Cache Aside로 저장하며 TTL은 10분입니다.
+- `availableRooms`: 시작/종료 시각과 수용 인원을 포함한 키로 예약 가능 회의실 조회 결과를 저장하며 TTL은 1분입니다.
 - 회의실 생성·수정·비활성화 또는 예약 생성·취소가 커밋된 뒤 도메인 이벤트로 관련 캐시 전체를 evict합니다.
 - TTL은 캐시 장애나 evict 누락에 대비하는 최후의 안전장치이며, 최신성은 명시적 evict로 보장합니다.
 
@@ -39,6 +39,12 @@ Client
 - 사용자 예약 목록: `(user_id, start_at)`
 - 관리자 회의실 예약 목록: `(room_id, created_at, id)`
 - MySQL `EXPLAIN`으로 충돌 조회의 `range` 스캔과 목록 조회의 `Backward index scan`을 확인했습니다.
+
+### Observability
+
+- Spring Boot Actuator가 HTTP 요청, JVM, HikariCP 메트릭을 제공하고 Prometheus가 app-1/app-2를 5초 간격으로 scrape합니다.
+- Grafana는 예약 생성 처리량, p95/p99, HikariCP active/pending, JVM Heap, Redis 메모리, Redis 락 결과를 시각화합니다.
+- `TraceIdFilter`가 요청별 `traceId`를 MDC와 `X-Trace-Id` 응답 헤더에 기록합니다. Alloy가 JSON 로그를 Loki로 전송하며 Grafana Explore에서 traceId로 요청 로그를 검색합니다.
 
 ## Tech Stack
 
@@ -109,17 +115,35 @@ docker compose ps app-2
 
 ## Monitoring and Logs
 
-- `/actuator/health`, `/actuator/prometheus`는 외부 헬스체크와 Prometheus scrape을 위해 공개합니다.
-- `/actuator/metrics`는 JWT 인증이 필요합니다.
+- Nginx는 외부에서 `/actuator/health`만 프록시합니다. `/actuator/prometheus`는 Docker Compose 내부 네트워크의 Prometheus가 직접 scrape합니다.
+- `/actuator/metrics`는 JWT 인증이 필요하며, Nginx를 통해 외부에 노출하지 않습니다.
 - Grafana dashboard는 예약 생성 처리량, p95/p99 지연 시간, HikariCP 활성/대기 연결, JVM Heap, Redis 메모리, Redis 락 결과를 보여줍니다.
 - Grafana Explore에서 Loki를 선택한 뒤 아래 LogQL을 사용할 수 있습니다.
 
 ```logql
 {service=~"app-1|app-2"} |= "reservation_created"
 {service=~"app-1|app-2", level="ERROR"}
+{service=~"app-1|app-2"} | json | traceId="<X-Trace-Id 값>"
 ```
 
 요청마다 `X-Trace-Id`가 없으면 서버가 생성하고 응답 헤더와 JSON 로그 MDC에 남깁니다. `traceId`는 Loki label이 아닌 JSON 필드로 보관해 label cardinality 폭증을 방지합니다.
+
+## Performance Evidence
+
+### 관리자 회의실 예약 목록 개선
+
+1,000 VU, 특정 회의실 예약 1,000건, 페이지 크기 50 조건에서 DTO Projection, JOIN, 서버 사이드 페이징을 적용했습니다.
+
+| Metric | Before | After |
+| --- | ---: | ---: |
+| P95 latency | 4.27s | 13.76ms |
+| Overall P95 | 3.55s | 10.76ms |
+| Average latency | 1.31s | 6.54ms |
+| Throughput | 169.87 req/s | 402.66 req/s |
+| HikariCP pending max | 190 | 0 |
+| Received data | 24.11GB | 2.99GB |
+
+자세한 k6 조건과 일반 사용자 조회 결과는 [performance/k6/docs/README.md](performance/k6/docs/README.md)를 참고합니다.
 
 ## Tests
 
@@ -143,8 +167,13 @@ k6 run performance/k6/scripts/reservation-lock-comparison.js
 
 동일 회의실·동일 시간대 경합에서 DB 락 단독과 Redis 락 + DB 락 하이브리드를 비교합니다. 50/150/300 RPS, 각 3회 결과는 `performance/k6/results`에 보관합니다.
 
-- 50 RPS에서는 Redis 락의 이점이 거의 없고 평균 p95가 소폭 증가했습니다.
-- 300 RPS에서는 DB 충돌 일부를 Redis에서 빠르게 거절했지만, Redis 왕복 비용 때문에 p95는 오히려 증가했습니다.
+| 동일 회의실 RPS | DB 락 단독 p95 | Redis + DB 락 p95 | 관찰 결과 |
+| --- | ---: | ---: | --- |
+| 50 | 6.71ms | 8.28ms | Redis 락 이점이 관찰되지 않았습니다. |
+| 150 | 6.28ms | 5.49ms | 지연 시간 차이가 작고 DB 충돌 감소도 미미했습니다. |
+| 300 | 4.07ms | 5.87ms | DB 충돌은 약 6.2% 감소했지만 Redis 왕복 비용으로 p95가 증가했습니다. |
+
+- 전체 RPS가 아니라 동일 `roomId`에 집중되는 경합, 예약 API p95, HikariCP pending을 함께 전환 판단 기준으로 봅니다.
 - 따라서 기본값은 DB 락 단독이며, Redis 락은 다중 인스턴스·높은 경합이 확인된 경우에만 선택적으로 활성화합니다.
 
 ## Operational Notes
